@@ -1,19 +1,37 @@
 
 
 
+// smaller big O runtime but more memory usage
+public boolean solve( 3dArray board){
+   
+  
+    if(board is filled){
+        return true;
+    }
+    
+    
+    for(int i = 1; i < 10; i++){
+        allowedPossibilities = getCellsWithAllowedPossibilies(i, board)
+        
+        foreach(cell : allowedPossibilities){ 
+            foreach (possibility : cell){  
+                newboard = board after placing possibiliity as value at cell location of board; //for backtracking
+                
+				if(!check_violation(cell.location, newboard)){
+					remarkTheBoard(cell.location, newboard);
+                	if(solve(newboard)){
+                    	return true;                
+                	}
+				}
+            }
+        }
+        
+    }
+	return false;
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
+// larger big O runtime but less memory used
 
 public boolean solve( 3dArray board){
    
@@ -30,10 +48,14 @@ public boolean solve( 3dArray board){
         
         foreach(cell : allowedPossibilities){ 
             foreach (possibility : cell){  
-                newboard = board after placing possibiliity as value at cell location of board; //for backtracking
-                remarkTheBoard(cell.location, newboard);
-                if(solve(newboard)){
+                place possibiliity as value at cell location of board; 
+                remarkTheBoard(cell.location, board);
+                if(solve(board)){
                     return true;                
+                }
+                else{
+                    unmark(board(cell.location));
+                    remove possibility at cell location of board                
                 }    
             }
         }
