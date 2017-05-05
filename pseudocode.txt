@@ -1,25 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// smaller big O runtime but more memory usage
 public boolean solve( 3dArray board){
    
-    if(violation occurs){
-        return false;    
-    }
+  
     if(board is filled){
         return true;
     }
@@ -31,13 +13,17 @@ public boolean solve( 3dArray board){
         foreach(cell : allowedPossibilities){ 
             foreach (possibility : cell){  
                 newboard = board after placing possibiliity as value at cell location of board; //for backtracking
-                remarkTheBoard(cell.location, newboard);
-                if(solve(newboard)){
-                    return true;                
-                }    
+                
+                if(!check_violation(cell.location, newboard)){
+                    remarkTheBoard(cell.location, newboard);
+                    if(solve(newboard)){
+                        return true;                
+                    }
+                }
             }
         }
         
     }
-
+    return false;
 }
+

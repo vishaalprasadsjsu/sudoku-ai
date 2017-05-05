@@ -235,15 +235,36 @@ class Sudoku:
     def board_filled(self):
         return
         
+    # TO BE DONE
+    def place_cell_in_board(self,section, position, board):
+        return
+        
+    # TO BE DONE
+    def violation_occured(self,section, position, board):
+        return
+    
+    # TO BE DONE
+    def remark_board(self, section, position, board):
+        return
+    
     def solve(self,board):
         if self.board_filled():
             return True
         
         for i in range(1,10):
-            allowed_possibilities = self.get_cells_with_allowed_num_poss()
-        #REST OF CODE TO BE DONE
+            allowed_possibilities = self.get_cells_with_allowed_num_poss(i, board)
+            for cell in allowed_possibilities:
+                for charPos in range(1,len(cell[2])):
+                    # cell[2] should contain possibilites, starting for loop at 1 to skip 0 value
+                    newBoard = self.place_poss_in_board(cell[2][charPos],cell[0], cell[1], board)
+                    if not self.violation_occured(cell[0],cell[1], newBoard):
+                        self.remark_board(cell[0],cell[1],newBoard)
+                        if self.solve(newBoard):
+                            return True
 
 
+        return False 
+       
 """
 Test
 """
