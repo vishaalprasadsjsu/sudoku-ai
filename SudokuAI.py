@@ -40,7 +40,7 @@ class Sudoku:
                             row.append(board[k][1][0])                
                             row.append(board[k][2][0])                            
                             
-                elif j>=3 & j<6:
+                elif j>=3 and j<6:
                      if i<3:
                          for k in range(0,3):
                             row.append(board[k][3][0])
@@ -77,50 +77,50 @@ class Sudoku:
                     column = list()
                     if j%3==0:
                         if i%3 ==0:
-                            for k in range(0,7,3):
+                            for k in xrange(0,7,3):
                                 column.append(board[k][0][0])
                                 column.append(board[k][3][0])                
                                 column.append(board[k][6][0])  
                         elif i==1 or i==4 or i==7:
-                            for k in range(1,8,3):
+                            for k in xrange(1,8,3):
                                 column.append(board[k][0][0])
                                 column.append(board[k][3][0])                
                                 column.append(board[k][6][0])   
                         elif i==2 or i==5 or i==8:
-                            for k in range(2,9,3):
+                            for k in xrange(2,9,3):
                                 column.append(board[k][0][0])
                                 column.append(board[k][3][0])                
                                 column.append(board[k][6][0])                            
                                 
                     elif j==1 or j==4 or j==7:
                         if i%3 ==0:
-                            for k in range(0,7,3):
+                            for k in xrange(0,7,3):
                                 column.append(board[k][1][0])
                                 column.append(board[k][4][0])                
                                 column.append(board[k][7][0])  
                         elif i==1 or i==4 or i==7:
-                            for k in range(1,8,3):
+                            for k in xrange(1,8,3):
                                 column.append(board[k][1][0])
                                 column.append(board[k][4][0])                
                                 column.append(board[k][7][0])   
                         elif i==2 or i==5 or i==8:
-                            for k in range(2,9,3):
+                            for k in xrange(2,9,3):
                                 column.append(board[k][1][0])
                                 column.append(board[k][4][0])                
                                 column.append(board[k][7][0])                             
-                    elif i==2 or i==5 or i==8:
+                    elif j==2 or j==5 or j==8:
                         if i%3 ==0:
-                            for k in range(0,7,3):
+                            for k in xrange(0,7,3):
                                 column.append(board[k][2][0])
                                 column.append(board[k][5][0])                
                                 column.append(board[k][8][0])  
                         elif i==1 or i==4 or i==7:
-                            for k in range(1,8,3):
+                            for k in xrange(1,8,3):
                                 column.append(board[k][2][0])
                                 column.append(board[k][5][0])                
                                 column.append(board[k][8][0])   
                         elif i==2 or i==5 or i==8:
-                            for k in range(2,9,3):
+                            for k in xrange(2,9,3):
                                 column.append(board[k][2][0])
                                 column.append(board[k][5][0])                
                                 column.append(board[k][8][0])             
@@ -270,4 +270,5 @@ class Sudoku:
 Test
 """
 s = Sudoku()
-print s.sudoku_table[0]
+s.print_table()
+s.print_table_with_possibilities()
