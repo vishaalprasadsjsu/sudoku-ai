@@ -232,9 +232,13 @@ class Sudoku:
 
         return
 
-    # TO BE DONE
+    #Returns a boolean depending upon if each cell has a single possibility
     def board_filled(self):
-        return
+        for i in range(9):
+            for j in range(9):
+                if len(self.sudoku_table[i][j]) > 1:
+                    return False
+        return True
         
     # TO BE DONE
     def place_cell_in_board(self,section, position, board):
@@ -270,5 +274,4 @@ class Sudoku:
 Test
 """
 s = Sudoku()
-s.print_table()
-s.print_table_with_possibilities()
+
