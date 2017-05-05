@@ -275,3 +275,5 @@ Test
 """
 s = Sudoku()
 
+s.print_table()
+s.print_table_with_possibilities()
