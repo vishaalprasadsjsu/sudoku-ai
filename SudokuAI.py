@@ -229,6 +229,7 @@ class Sudoku:
             
     # TO BE DONE
     def get_cells_with_allowed_num_poss(self):
+
         return
 
     # TO BE DONE
@@ -270,5 +271,3 @@ Test
 """
 s = Sudoku()
 print s.sudoku_table[0]
-print s.print_table()
-print s.print_table_with_possibilities()
