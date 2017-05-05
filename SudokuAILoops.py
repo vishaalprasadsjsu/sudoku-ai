@@ -148,7 +148,16 @@ class Sudoku:
            	    print ""
             
     # TO BE DONE
-    def get_cells_with_allowed_num_poss(self):
+    def get_cells_with_allowed_num_poss(i, board):
+        cells_allowed_pos = []
+        for i in range(9):
+            for j in range(9):
+                if len(board[i][j]) == i:
+                    cells_allowed_pos.append(board[i][j])
+
+
+        return cells_allowed_pos
+
 
         return
 
