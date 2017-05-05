@@ -1,3 +1,5 @@
+from copy import copy, deepcopy
+
 # Agent that solves Sudoku puzzles
 
 
@@ -172,6 +174,9 @@ class Sudoku:
     
     def solve(self,board):
         if self.board_filled():
+            # may need deepcopy
+            #self.board = deepcopy(board)
+            self.board = board
             return True
         
         for i in range(1,10):
