@@ -170,7 +170,7 @@ class Sudoku:
         return True
     
     # TO BE DONE, PRIORITY
-    def no_more_possibilites(self):
+    def no_more_possibilites(self,board):
         return True
     
     # TO BE DONE, PRIORITY
@@ -213,7 +213,7 @@ class Sudoku:
             #self.board = deepcopy(board)
             self.board = board
             return True
-        elif not self.board_filled(board) and self.no_possibilities:
+        elif not self.board_filled(board) and self.no_possibilities(board):
             return False
         
         for i in range(1,10):
