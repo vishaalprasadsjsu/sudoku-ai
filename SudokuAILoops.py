@@ -162,14 +162,18 @@ class Sudoku:
         return
 
     #Returns a boolean depending upon if each cell has a single possibility
-    def board_filled(self):
+    def board_filled(self,board):
         for i in range(9):
             for j in range(9):
-                if len(self.sudoku_table[i][j]) > 1:
+                if len(self.board[i][j]) > 1:
                     return False
         return True
-        
-    # TO BE DONE
+    
+    # TO BE DONE, PRIORITY
+    def no_more_possibilites(self):
+        return True
+    
+    # TO BE DONE, PRIORITY
     def place_cell_in_board(self,section, position, board):
         return
         
@@ -177,7 +181,7 @@ class Sudoku:
     def violation_occured(self,section, position, board):
         return
     
-    # TO BE DONE
+    # TO BE DONE, PRIORITY
     def remark_board(self, section, position, board):
         return
     
@@ -198,6 +202,30 @@ class Sudoku:
                         self.remark_board(cell[0],cell[1],newBoard)
                         if self.solve(newBoard):
                             return True
+
+
+        return False 
+    
+    # violation_occured may not be needed, new no possibilites method used
+    def solveAlt(self,board):
+        if self.board_filled(board):
+            # may need deepcopy
+            #self.board = deepcopy(board)
+            self.board = board
+            return True
+        elif not self.board_filled(board) and self.no_possibilities:
+            return False
+        
+        for i in range(1,10):
+            allowed_possibilities = self.get_cells_with_allowed_num_poss(i, board)
+            for cell in allowed_possibilities:
+                for charPos in range(1,len(cell[2])):
+                    # cell[2] should contain possibilites, starting for loop at 1 to skip 0 value
+                    newBoard = self.place_poss_in_board(cell[2][charPos],cell[0], cell[1], board)
+                    
+                    self.remark_board(cell[0],cell[1],newBoard)
+                    if self.solve(newBoard):
+                        return True
 
 
         return False 
