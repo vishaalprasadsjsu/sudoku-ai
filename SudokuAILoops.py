@@ -171,7 +171,19 @@ class Sudoku:
     
     # TO BE DONE, PRIORITY
     def no_more_possibilites(self,board):
-        return True
+        # iterate through board 
+        # find any cell i,j with value 0 AND length 1 
+
+        for x in range(0,9):
+            for y in xrange(0,9):
+                if(len(board[x][y]) == 1 and board[x][y][0] == 0) 
+                    # this is a bad cell, no more possibilities for this cell 
+                    return True 
+            pass
+        pass    
+
+        # Good board, we can continue 
+        return False
     
     # TO BE DONE, PRIORITY
     def place_cell_in_board(self,section, position, board):
