@@ -194,8 +194,8 @@ class Sudoku:
     def remark_board(self, section, position, board):
         value = board[section][position]
         
-        print value
-        
+      
+       
         # iterate through row
         row_i_start = 3 * (section/3)
         row_j_start = 3 * (position/3)
@@ -203,7 +203,7 @@ class Sudoku:
         for row_i_iterator in range(row_i_start, row_i_start + 3): 
             for row_j_iterator in range(row_j_start, row_j_start + 3): 
                 if value in board[row_i_iterator][row_j_iterator]:
-                    board[row_i_iterator][row_j_iterator][str.index(value)] = ''
+                    board[row_i_iterator][row_j_iterator].replace(value, "")
         
         # iterate through columns
         col_i_start = section%3;
@@ -212,11 +212,11 @@ class Sudoku:
         for col_i_iter in xrange(col_i_start, col_i_start + 7, 3):
             for col_j_iter in xrange(col_j_start, col_j_start + 7, 3):
                 if value in board[col_i_iter][col_j_iter]:
-                    board[col_i_iter][col_j_iter][str.index(value)] = ''
+                    board[col_i_iter][col_j_iter].replace(value, "")
         
         for x in range(0,9):
             if value in board[section][x]:
-                board[section][x][str.index(value)] = ''
+                board[section][x].replace(value, "")
                           
         return
     
