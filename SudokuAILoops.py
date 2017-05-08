@@ -147,19 +147,14 @@ class Sudoku:
             				print " ",
            	    print ""
             
-    # TO BE DONE
-    def get_cells_with_allowed_num_poss(i, board):
-        cells_allowed_pos = []
+    # Returns a list of triples which contain c[0] sector, c[1] position, and c[2] string of possibilities
+    def get_cells_with_allowed_num_poss(self, board):
+        list = []
         for i in range(9):
             for j in range(9):
-                if len(board[i][j]) == i:
-                    cells_allowed_pos.append(board[i][j])
-
-
-        return cells_allowed_pos
-
-
-        return
+                if len(self.sudoku_table[i][j]) > 1:
+                    list.append([i,j,self.sudoku_table[i][j]])
+        return list
 
     #Returns a boolean depending upon if each cell has a single possibility
     def board_filled(self,board):
