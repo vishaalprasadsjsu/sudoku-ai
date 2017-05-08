@@ -16,7 +16,9 @@ class Sudoku:
                     
                     self.sudoku_table[i][j]+= self.get_possibilities(i,j,self.sudoku_table)
 
-         
+        #for x in range(0,len(self.sudoku_table)):
+        #    for y in range(0,len(self.sudoku_table)):
+                
     def read_table(self):
         """ Reads sudoku puzzle from file, each row represents one section, 9 sections total
        	
@@ -153,7 +155,7 @@ class Sudoku:
         list = []
         for i in range(9):
             for j in range(9):
-                if len(board[i][j]) == count:
+                if len(board[i][j]) <= count:
                     list.append([i,j,board[i][j]])
         return list
 
@@ -198,7 +200,7 @@ class Sudoku:
         value = board[section][position]
         
       
-        print value
+        print "position"+str(section) + str(position)
         # iterate through row
         row_i_start = 3 * (section/3)
         row_j_start = 3 * (position/3)
@@ -208,6 +210,7 @@ class Sudoku:
                 if value in board[row_i_iterator][row_j_iterator] and not (row_i_iterator == section and row_j_iterator == position):
                     board[row_i_iterator][row_j_iterator]=board[row_i_iterator][row_j_iterator].replace(value, "")
                     print board[row_i_iterator][row_j_iterator]
+        print '\n'
         # iterate through columns
         col_i_start = section%3;
         col_j_start = position%3;
@@ -262,7 +265,7 @@ class Sudoku:
             allowed_possibilities = self.get_cells_with_allowed_num_poss(i, board)
             for cell in allowed_possibilities:
                 for charPos in range(1,len(cell[2])):
-                    # cell[2] should contain possibilites, starting for loop at 2 to skip 0 value
+                    # cell[2] should contain possibilites, starting for loop at 1 to skip 0 value
                     newBoard = self.place_poss_in_board(cell[2][charPos],cell[0], cell[1], board)
                     
                     self.remark_board(cell[0],cell[1],newBoard)
@@ -273,13 +276,14 @@ class Sudoku:
                         return True
 
 
-        return False 
+        return True 
        
 """
 Test
 """
 s = Sudoku()
 
+s.print_table(s.sudoku_table)
 s.solveAlt(s.sudoku_table)
 
 #
