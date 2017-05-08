@@ -15,43 +15,6 @@ class Sudoku:
                     
                     self.sudoku_table[i][j]+= self.get_possibilities(i,j,self.sudoku_table)
 
-    def get_possibilities(self,i,j,board):
-        possibilites = ""
-        for potential_poss in range(1,10):
-            # get first character of each location of section
-            first_character_list = list()
-            for x in range(0,9):
-                first_character_list.append(board[i][x][0])
-            # check section
-            if str(potential_poss) not in first_character_list:
-                # check row
-                row = list()
-                row_i_start = 3 * (i/3)
-                row_j_start = 3 * (j/3)
-
-                for row_i_iterator in range(row_i_start, row_i_start + 3): 
-                    for row_j_iterator in range(row_j_start, row_j_start + 3): 
-                        row.append(board[row_i_iterator][row_j_iterator][0])
-    
-                if str(potential_poss) not in row:
-                    # check columns
-                    column = list()
-                    col_i_start = i%3;
-                    col_j_start = j%3;
-
-                    for col_i_iter in xrange(col_i_start, col_i_start + 7, 3):
-                        for col_j_iter in xrange(col_j_start, col_j_start + 7, 3):
-                            column.append(board[col_i_iter][col_j_iter][0])
-            
-                    if str(potential_poss) not in column:
-                        possibilites+=str(potential_poss)
-                  
-                    
-                
-                
-        
-        return possibilites
- 
          
     def read_table(self):
         """ Reads sudoku puzzle from file, each row represents one section, 9 sections total
@@ -146,7 +109,44 @@ class Sudoku:
            					
             				print " ",
            	    print ""
+
+    def get_possibilities(self,i,j,board):
+        possibilites = ""
+        for potential_poss in range(1,10):
+            # get first character of each location of section
+            first_character_list = list()
+            for x in range(0,9):
+                first_character_list.append(board[i][x][0])
+            # check section
+            if str(potential_poss) not in first_character_list:
+                # check row
+                row = list()
+                row_i_start = 3 * (i/3)
+                row_j_start = 3 * (j/3)
+
+                for row_i_iterator in range(row_i_start, row_i_start + 3): 
+                    for row_j_iterator in range(row_j_start, row_j_start + 3): 
+                        row.append(board[row_i_iterator][row_j_iterator][0])
+    
+                if str(potential_poss) not in row:
+                    # check columns
+                    column = list()
+                    col_i_start = i%3;
+                    col_j_start = j%3;
+
+                    for col_i_iter in xrange(col_i_start, col_i_start + 7, 3):
+                        for col_j_iter in xrange(col_j_start, col_j_start + 7, 3):
+                            column.append(board[col_i_iter][col_j_iter][0])
             
+                    if str(potential_poss) not in column:
+                        possibilites+=str(potential_poss)
+                  
+                    
+                
+                
+        
+        return possibilites
+             
     # Returns a list of triples which contain c[0] sector, c[1] position, and c[2] string of possibilities
     def get_cells_with_allowed_num_poss(self, count, board):
         list = []
@@ -160,7 +160,7 @@ class Sudoku:
     def board_filled(self,board):
         for i in range(9):
             for j in range(9):
-                if len(self.board[i][j]) > 1:
+                if len(board[i][j]) > 1:
                     return False
         return True
     
@@ -181,7 +181,7 @@ class Sudoku:
         return False
     
     # TO BE DONE, PRIORITY
-    def place_cell_in_board(self,value,section, position, board):
+    def place_poss_in_board(self,value,section, position, board):
         new_board = deepcopy(board)
         new_board[section][position]=str(value)
         return new_board
@@ -192,10 +192,36 @@ class Sudoku:
     
     # TO BE DONE, PRIORITY
     def remark_board(self, section, position, board):
+        value = board[section][position]
+        
+        print value
+        
+        # iterate through row
+        row_i_start = 3 * (section/3)
+        row_j_start = 3 * (position/3)
+
+        for row_i_iterator in range(row_i_start, row_i_start + 3): 
+            for row_j_iterator in range(row_j_start, row_j_start + 3): 
+                if value in board[row_i_iterator][row_j_iterator]:
+                    board[row_i_iterator][row_j_iterator][str.index(value)] = ''
+        
+        # iterate through columns
+        col_i_start = section%3;
+        col_j_start = position%3;
+
+        for col_i_iter in xrange(col_i_start, col_i_start + 7, 3):
+            for col_j_iter in xrange(col_j_start, col_j_start + 7, 3):
+                if value in board[col_i_iter][col_j_iter]:
+                    board[col_i_iter][col_j_iter][str.index(value)] = ''
+        
+        for x in range(0,9):
+            if value in board[section][x]:
+                board[section][x][str.index(value)] = ''
+                          
         return
     
     def solve(self,board):
-        if self.board_filled():
+        if self.board_filled(board):
             # may need deepcopy
             #self.board = deepcopy(board)
             self.board = board
@@ -222,7 +248,7 @@ class Sudoku:
             #self.board = deepcopy(board)
             self.board = board
             return True
-        elif not self.board_filled(board) and self.no_possibilities(board):
+        elif not self.board_filled(board) and self.no_more_possibilites(board):
             return False
         
         for i in range(2,10):
@@ -246,16 +272,19 @@ s = Sudoku()
 
 s.print_table()
 s.print_table_with_possibilities()
-
-# test place cell in board, does not affect sudoku_table at first call
-new_board = s.place_cell_in_board(5,0,1,s.sudoku_table)
+s.solveAlt(s.sudoku_table)
 s.print_table()
 s.print_table_with_possibilities()
-
-# change reference, should affect sudoku_table
-s.sudoku_table = new_board
-s.print_table()
-s.print_table_with_possibilities()
-
-# test get_cell_with_num_poss
-print s.get_cells_with_allowed_num_poss(7,new_board)
+#
+## test place cell in board, does not affect sudoku_table at first call
+#new_board = s.place_cell_in_board(5,0,1,s.sudoku_table)
+#s.print_table()
+#s.print_table_with_possibilities()
+#
+## change reference, should affect sudoku_table
+#s.sudoku_table = new_board
+#s.print_table()
+#s.print_table_with_possibilities()
+#
+## test get_cell_with_num_poss
+#print s.get_cells_with_allowed_num_poss(7,new_board)
