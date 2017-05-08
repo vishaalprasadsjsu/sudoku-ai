@@ -7,6 +7,7 @@ from copy import copy, deepcopy
 
 class Sudoku:
     def __init__(self):
+        
         self.sudoku_table = [0]*9
         self.read_table()
         for i in range(0,len(self.sudoku_table)):
@@ -85,7 +86,7 @@ class Sudoku:
 
 
 
-    def print_table(self):
+    def print_table(self,board):
             for sections_of_three in range(3):
            	    for row in range(3):
           		for i in range(0+sections_of_three*3,3*(sections_of_three+1)):
@@ -96,7 +97,7 @@ class Sudoku:
            					#print "\ntimes run %s"  % z
            					#print "\n i is %s" % i
            					
-           					print "%s" % self.sudoku_table[i][z][0],
+           					print "%s" % board[i][z][0],
            					
             				print " ",
          			else:
@@ -105,7 +106,7 @@ class Sudoku:
            					#print "\ntimes run %s"  % z
            					#print "\n i is %s" % i
            					
-           					print "%s" % self.sudoku_table[i][z][0],
+           					print "%s" % board[i][z][0],
            					
             				print " ",
            	    print ""
@@ -152,8 +153,8 @@ class Sudoku:
         list = []
         for i in range(9):
             for j in range(9):
-                if len(self.sudoku_table[i][j]) == count:
-                    list.append([i,j,self.sudoku_table[i][j]])
+                if len(board[i][j]) == count:
+                    list.append([i,j,board[i][j]])
         return list
 
     #Returns a boolean depending upon if each cell has a single possibility
@@ -243,15 +244,18 @@ class Sudoku:
     
     # violation_occured may not be needed, new no possibilites method used
     def solveAlt(self,board):
+        
         if self.board_filled(board):
             # may need deepcopy
             #self.board = deepcopy(board)
             self.board = board
             return True
         elif not self.board_filled(board) and self.no_more_possibilites(board):
+            print "FAIL"
             return False
         
         for i in range(2,10):
+            
             allowed_possibilities = self.get_cells_with_allowed_num_poss(i, board)
             for cell in allowed_possibilities:
                 for charPos in range(1,len(cell[2])):
@@ -259,7 +263,10 @@ class Sudoku:
                     newBoard = self.place_poss_in_board(cell[2][charPos],cell[0], cell[1], board)
                     
                     self.remark_board(cell[0],cell[1],newBoard)
-                    if self.solve(newBoard):
+                    self.print_table(newBoard)
+                    self.print_table_with_possibilities()
+
+                    if self.solveAlt(newBoard):
                         return True
 
 
@@ -270,11 +277,8 @@ Test
 """
 s = Sudoku()
 
-s.print_table()
-s.print_table_with_possibilities()
 s.solveAlt(s.sudoku_table)
-s.print_table()
-s.print_table_with_possibilities()
+
 #
 ## test place cell in board, does not affect sudoku_table at first call
 #new_board = s.place_cell_in_board(5,0,1,s.sudoku_table)
