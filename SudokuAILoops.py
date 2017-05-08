@@ -181,8 +181,10 @@ class Sudoku:
         return False
     
     # TO BE DONE, PRIORITY
-    def place_cell_in_board(self,section, position, board):
-        return
+    def place_cell_in_board(self,value,section, position, board):
+        new_board = deepcopy(board)
+        new_board[section][position]=str(value)
+        return new_board
         
     # TO BE DONE
     def violation_occured(self,section, position, board):
@@ -199,15 +201,15 @@ class Sudoku:
             self.board = board
             return True
         
-        for i in range(1,10):
+        for i in range(2,10):
             allowed_possibilities = self.get_cells_with_allowed_num_poss(i, board)
             for cell in allowed_possibilities:
-                for charPos in range(1,len(cell[2])):
-                    # cell[2] should contain possibilites, starting for loop at 1 to skip 0 value
-                    newBoard = self.place_poss_in_board(cell[2][charPos],cell[0], cell[1], board)
-                    if not self.violation_occured(cell[0],cell[1], newBoard):
-                        self.remark_board(cell[0],cell[1],newBoard)
-                        if self.solve(newBoard):
+                for char_pos in range(1,len(cell[2])):
+                    # cell[2] should contain possibilites, starting for loop at 2 to skip 0 value
+                    new_board = self.place_poss_in_board(cell[2][char_pos],cell[0], cell[1], board)
+                    if not self.violation_occured(cell[0],cell[1], new_board):
+                        self.remark_board(cell[0],cell[1],new_board)
+                        if self.solve(new_board):
                             return True
 
 
@@ -223,11 +225,11 @@ class Sudoku:
         elif not self.board_filled(board) and self.no_possibilities(board):
             return False
         
-        for i in range(1,10):
+        for i in range(2,10):
             allowed_possibilities = self.get_cells_with_allowed_num_poss(i, board)
             for cell in allowed_possibilities:
                 for charPos in range(1,len(cell[2])):
-                    # cell[2] should contain possibilites, starting for loop at 1 to skip 0 value
+                    # cell[2] should contain possibilites, starting for loop at 2 to skip 0 value
                     newBoard = self.place_poss_in_board(cell[2][charPos],cell[0], cell[1], board)
                     
                     self.remark_board(cell[0],cell[1],newBoard)
@@ -244,3 +246,16 @@ s = Sudoku()
 
 s.print_table()
 s.print_table_with_possibilities()
+
+# test place cell in board, does not affect sudoku_table at first call
+new_board = s.place_cell_in_board(5,0,1,s.sudoku_table)
+s.print_table()
+s.print_table_with_possibilities()
+
+# change reference, should affect sudoku_table
+s.sudoku_table = new_board
+s.print_table()
+s.print_table_with_possibilities()
+
+# test get_cell_with_num_poss
+print s.get_cells_with_allowed_num_poss(7,new_board)
