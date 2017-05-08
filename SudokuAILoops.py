@@ -53,7 +53,7 @@ class Sudoku:
         
         
     # Prints Sudoku in a nice, standard format
-    def print_table_with_possibilities(self):
+    def print_table_with_possibilities(self, board):
             for sections_of_three in range(3):
            	    for row in range(3):
           		for i in range(0+sections_of_three*3,3*(sections_of_three+1)):
@@ -65,9 +65,9 @@ class Sudoku:
            					#print "\ntimes run %s"  % z
            					#print "\n i is %s" % i
            					if self.sudoku_table[i][z][1:] != "":
-           					    print "(%s: poss %9s)" % (self.sudoku_table[i][z][0], self.sudoku_table[i][z][1:]),
+           					    print "(%s: poss %9s)" % (board[i][z][0], board[i][z][1:]),
            					else:
-                                                    print "(%s: %14s)" % (self.sudoku_table[i][z][0], ""),
+                                                    print "(%s: %14s)" % (board[i][z][0], ""),
             				print "            ",
          			else:
             				for z in range(0+(row*3),3*(row+1)):
@@ -75,9 +75,9 @@ class Sudoku:
            					#print "\ntimes run %s"  % z
            					#print "\n i is %s" % i
            					if self.sudoku_table[i][z][1:] != "":
-           					    print "(%s: poss %9s)" % (self.sudoku_table[i][z][0], self.sudoku_table[i][z][1:]),
+           					    print "(%s: poss %9s)" % (board[i][z][0], board[i][z][1:]),
            					else:
-                                                    print "(%s: %14s)" % (self.sudoku_table[i][z][0], ""),
+                                                    print "(%s: %14s)" % (board[i][z][0], ""),
             				print "            ",
            	    print ""
            	    print ""
@@ -172,11 +172,13 @@ class Sudoku:
 
         for x in range(0,9):
             for y in xrange(0,9):
-                if(len(board[x][y]) == 1 and board[x][y][0] == 0): 
+               
+                if(len(board[x][y]) == 1 and board[x][y][0] == '0'): 
+                    
                     # this is a bad cell, no more possibilities for this cell 
+                    
                     return True 
-            pass
-        pass    
+      
 
         # Good board, we can continue 
         return False
@@ -196,29 +198,30 @@ class Sudoku:
         value = board[section][position]
         
       
-       
+        print value
         # iterate through row
         row_i_start = 3 * (section/3)
         row_j_start = 3 * (position/3)
 
         for row_i_iterator in range(row_i_start, row_i_start + 3): 
             for row_j_iterator in range(row_j_start, row_j_start + 3): 
-                if value in board[row_i_iterator][row_j_iterator]:
-                    board[row_i_iterator][row_j_iterator].replace(value, "")
-        
+                if value in board[row_i_iterator][row_j_iterator] and not (row_i_iterator == section and row_j_iterator == position):
+                    board[row_i_iterator][row_j_iterator]=board[row_i_iterator][row_j_iterator].replace(value, "")
+                    print board[row_i_iterator][row_j_iterator]
         # iterate through columns
         col_i_start = section%3;
         col_j_start = position%3;
 
         for col_i_iter in xrange(col_i_start, col_i_start + 7, 3):
             for col_j_iter in xrange(col_j_start, col_j_start + 7, 3):
-                if value in board[col_i_iter][col_j_iter]:
-                    board[col_i_iter][col_j_iter].replace(value, "")
-        
+                if value in board[col_i_iter][col_j_iter] and not (col_i_iter == section and col_j_iter == position):
+                    board[col_i_iter][col_j_iter]=board[col_i_iter][col_j_iter].replace(value, "")
+                    print board[col_i_iter][col_j_iter]
+        print '\n'
         for x in range(0,9):
-            if value in board[section][x]:
-                board[section][x].replace(value, "")
-                          
+            if value in board[section][x] and x != position:
+                board[section][x]=board[section][x].replace(value, "")
+                print board[section][x]
         return
     
     def solve(self,board):
@@ -250,7 +253,7 @@ class Sudoku:
             #self.board = deepcopy(board)
             self.board = board
             return True
-        elif not self.board_filled(board) and self.no_more_possibilites(board):
+        elif self.no_more_possibilites(board):
             print "FAIL"
             return False
         
@@ -264,7 +267,7 @@ class Sudoku:
                     
                     self.remark_board(cell[0],cell[1],newBoard)
                     self.print_table(newBoard)
-                    self.print_table_with_possibilities()
+                    self.print_table_with_possibilities(newBoard)
 
                     if self.solveAlt(newBoard):
                         return True
