@@ -148,11 +148,11 @@ class Sudoku:
            	    print ""
             
     # Returns a list of triples which contain c[0] sector, c[1] position, and c[2] string of possibilities
-    def get_cells_with_allowed_num_poss(self, board):
+    def get_cells_with_allowed_num_poss(self, count, board):
         list = []
         for i in range(9):
             for j in range(9):
-                if len(self.sudoku_table[i][j]) > 1:
+                if len(self.sudoku_table[i][j]) == count:
                     list.append([i,j,self.sudoku_table[i][j]])
         return list
 
@@ -166,7 +166,19 @@ class Sudoku:
     
     # TO BE DONE, PRIORITY
     def no_more_possibilites(self,board):
-        return True
+        # iterate through board 
+        # find any cell i,j with value 0 AND length 1 
+
+        for x in range(0,9):
+            for y in xrange(0,9):
+                if(len(board[x][y]) == 1 and board[x][y][0] == 0): 
+                    # this is a bad cell, no more possibilities for this cell 
+                    return True 
+            pass
+        pass    
+
+        # Good board, we can continue 
+        return False
     
     # TO BE DONE, PRIORITY
     def place_cell_in_board(self,section, position, board):
