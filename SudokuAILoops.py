@@ -1,4 +1,4 @@
-from copy import copy, deepcopy
+from copy import deepcopy
 
 # Agent that solves Sudoku puzzles
 
@@ -149,13 +149,55 @@ class Sudoku:
                 
         
         return possibilites
-             
+    
+    def skip_invalid_single_possibilities(self, board,i,j):
+        value = board[i][j]
+                        
+                        
+        # iterate through row
+        row_i_start = 3 * (i/3)
+        row_j_start = 3 * (j/3)
+                
+        for row_i_iterator in range(row_i_start, row_i_start + 3): 
+            for row_j_iterator in range(row_j_start, row_j_start + 3): 
+                if board[row_i_iterator][row_j_iterator] in value and not (row_i_iterator == i and row_j_iterator == j) and len(board[row_i_iterator][row_j_iterator])==2:
+                    print "skipped"
+                    print "position"+str(i) + str(j)
+                    return True
+        print '\n'
+        # iterate through columns
+        col_i_start = i%3;
+        col_j_start = j%3;
+                
+        for col_i_iter in xrange(col_i_start, col_i_start + 7, 3):
+            for col_j_iter in xrange(col_j_start, col_j_start + 7, 3):
+                if board[col_i_iter][col_j_iter] in value and not (col_i_iter == i and col_j_iter == j) and len(board[col_i_iter][col_j_iter])==2:
+                    print "skipped"
+                    print "position"+str(i) + str(j)
+                    return True
+        print '\n'
+        for x in range(0,9): 
+            if board[i][x] in value and x != j and len(board[i][x])==2:
+                print "skipped"
+                print "position"+str(i) + str(j)
+                return True
+        return False
+    
+    
     # Returns a list of triples which contain c[0] sector, c[1] position, and c[2] string of possibilities
     def get_cells_with_allowed_num_poss(self, count, board):
         list = []
         for i in range(9):
             for j in range(9):
-                if len(board[i][j]) <= count:
+                if len(board[i][j]) == count:
+                    if self.skip_invalid_single_possibilities(board,i,j):
+                        continue
+                        
+                        
+                        
+                        
+                        
+                    print list
                     list.append([i,j,board[i][j]])
         return list
 
@@ -193,7 +235,33 @@ class Sudoku:
         
     # TO BE DONE
     def violation_occured(self,section, position, board):
-        return
+        value = board[section][position][0]
+        row_i_start = 3 * (section/3)
+        row_j_start = 3 * (position/3)
+
+        for row_i_iterator in range(row_i_start, row_i_start + 3): 
+            for row_j_iterator in range(row_j_start, row_j_start + 3): 
+                if value in board[row_i_iterator][row_j_iterator][0] and not (row_i_iterator == section and row_j_iterator == position):
+                    print board[row_i_iterator][row_j_iterator]
+                    return True
+
+        print '\n'
+        # iterate through columns
+        col_i_start = section%3;
+        col_j_start = position%3;
+
+        for col_i_iter in xrange(col_i_start, col_i_start + 7, 3):
+            for col_j_iter in xrange(col_j_start, col_j_start + 7, 3):
+                if value in board[col_i_iter][col_j_iter][0] and not (col_i_iter == section and col_j_iter == position):
+                    print board[col_i_iter][col_j_iter]
+                    return True
+        print '\n'
+        for x in range(0,9):
+            if value in board[section][x][0] and x != position:
+                print board[section][x]
+                return True
+        
+        return False
     
     # TO BE DONE, PRIORITY
     def remark_board(self, section, position, board):
@@ -226,7 +294,8 @@ class Sudoku:
                 board[section][x]=board[section][x].replace(value, "")
                 print board[section][x]
         return
-    
+        
+    # old, incorrect algorithm
     def solve(self,board):
         if self.board_filled(board):
             # may need deepcopy
@@ -251,17 +320,20 @@ class Sudoku:
     # violation_occured may not be needed, new no possibilites method used
     def solveAlt(self,board):
         
-        if self.board_filled(board):
+        
+        if self.no_more_possibilites(board):
+            print "FAIL"
+            self.print_table(board)
+            self.print_table_with_possibilities(board)
+            return False
+        elif self.board_filled(board):
             # may need deepcopy
             #self.board = deepcopy(board)
             self.board = board
             return True
-        elif self.no_more_possibilites(board):
-            print "FAIL"
-            return False
         
         for i in range(2,10):
-            
+            print "index is at " + str(i)
             allowed_possibilities = self.get_cells_with_allowed_num_poss(i, board)
             for cell in allowed_possibilities:
                 for charPos in range(1,len(cell[2])):
@@ -276,15 +348,62 @@ class Sudoku:
                         return True
 
 
-        return True 
+        return False 
+        
+    # brute force    
+    def solveAlt2(self,board, visited):
+        breaking = False
+        i=0
+        j=0
+        if self.board_filled(board):
+            # may need deepcopy
+            #self.board = deepcopy(board)
+            self.board = board
+            return True
+            
+        for section in range(0,len(board)):
+                
+                for position in range(0,len(board)):
+                    if board[section][position][0]=='0':
+                        i = section
+                        j = position
+                        breaking = True
+                        print str(i) + " " +str(j)
+                        break
+                if breaking:
+                    break
+        
+        for x in range(1,10):
+            
+            
+            
+            # cell[2] should contain possibilites, starting for loop at 1 to skip 0 value
+            print "x is " +str(x)
+            newBoard = self.place_poss_in_board(str(x),i, j, board)
+            #self.remark_board(i,j,newBoard)                    
+            self.print_table(newBoard)
+            #self.print_table_with_possibilities(newBoard)
+
+            if self.violation_occured(i,j,newBoard):
+                print "FAIL"
+                continue
+            elif self.solveAlt2(newBoard, visited):
+                return True
+
+
+        return False 
+       
        
 """
 Test
 """
 s = Sudoku()
 
-s.print_table(s.sudoku_table)
-s.solveAlt(s.sudoku_table)
+#s.print_table(s.sudoku_table)
+# MINIMUM PATH VERSION
+#s.solveAlt(s.sudoku_table)
+# BRUTE FORCE
+s.solveAlt2(s.sudoku_table)
 
 #
 ## test place cell in board, does not affect sudoku_table at first call
