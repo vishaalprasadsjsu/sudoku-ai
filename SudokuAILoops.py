@@ -2,10 +2,10 @@ from copy import deepcopy
 
 # Agent that solves Sudoku puzzles
 
-
-
+present_mode = True; # step by step 
 
 class Sudoku:
+    
     def __init__(self):
         
         self.sudoku_table = [0]*9
@@ -59,31 +59,19 @@ class Sudoku:
             for sections_of_three in range(3):
            	    for row in range(3):
           		for i in range(0+sections_of_three*3,3*(sections_of_three+1)):
-         			if i % 3 ==0 :
+         			if i % 3 == 0 :
             				print ""
 
-            				for z in range(0+(row*3),3*(row+1)):
-           					#print "\nrow is %s " % row
-           					#print "\ntimes run %s"  % z
-           					#print "\n i is %s" % i
-           					if self.sudoku_table[i][z][1:] != "":
-           					    print "(%s: poss %9s)" % (board[i][z][0], board[i][z][1:]),
-           					else:
-                                                    print "(%s: %14s)" % (board[i][z][0], ""),
-            				print "            ",
-         			else:
-            				for z in range(0+(row*3),3*(row+1)):
-           					#print "\nrow is %s " % row
-           					#print "\ntimes run %s"  % z
-           					#print "\n i is %s" % i
-           					if self.sudoku_table[i][z][1:] != "":
-           					    print "(%s: poss %9s)" % (board[i][z][0], board[i][z][1:]),
-           					else:
-                                                    print "(%s: %14s)" % (board[i][z][0], ""),
-            				print "            ",
-           	    print ""
-           	    print ""
-           	    print ""
+    				for z in range(0+(row*3),3*(row+1)):
+   					#print "\nrow is %s " % row
+   					#print "\ntimes run %s"  % z
+   					#print "\n i is %s" % i
+   					if self.sudoku_table[i][z][1:] != "":
+   					    print "|%s|%-9s" % (board[i][z][0], board[i][z][1:]),
+   					else:
+                                            print "|%s|%-9s" % (board[i][z][0], ""),
+    				print "\t\t", 
+           	    print "\n\n"
             
 
 
@@ -399,11 +387,16 @@ Test
 """
 s = Sudoku()
 
-#s.print_table(s.sudoku_table)
+s.print_table(s.sudoku_table)
+s.print_table_with_possibilities(s.sudoku_table)
+
+if present_mode: 
+    raw_input("Press <ENTER> to watch the agent begin")
+
 # MINIMUM PATH VERSION
-#s.solveAlt(s.sudoku_table)
+s.solveAlt(s.sudoku_table)
 # BRUTE FORCE
-s.solveAlt2(s.sudoku_table)
+# s.solveAlt2(s.sudoku_table, False)
 
 #
 ## test place cell in board, does not affect sudoku_table at first call
