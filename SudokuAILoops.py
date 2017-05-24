@@ -7,7 +7,7 @@ present_mode = True; # step by step
 class Sudoku:
     
     def __init__(self):
-        
+        self.boards_so_far = []
         self.sudoku_table = [0]*9
         self.read_table()
         for i in range(0,len(self.sudoku_table)):
@@ -250,6 +250,50 @@ class Sudoku:
                 return True
         
         return False
+        
+    def unmark_board(self, section, position, board):
+        value = board[section][position]
+        
+      
+        print "position"+str(section) + str(position)
+        # iterate through row
+        row_i_start = 3 * (section/3)
+        row_j_start = 3 * (position/3)
+
+        for row_i_iterator in range(row_i_start, row_i_start + 3): 
+            for row_j_iterator in range(row_j_start, row_j_start + 3): 
+                if value not in board[row_i_iterator][row_j_iterator] and not (row_i_iterator == section and row_j_iterator == position):
+                    board[row_i_iterator][row_j_iterator]=board[row_i_iterator][row_j_iterator]+value
+                    board[row_i_iterator][row_j_iterator] = board[row_i_iterator][row_j_iterator][0]+''.join(sorted(board[row_i_iterator][row_j_iterator][1:]))
+                    print board[row_i_iterator][row_j_iterator]
+                
+                    
+                    
+        print '\n'
+        # iterate through columns
+        col_i_start = section%3;
+        col_j_start = position%3;
+
+        for col_i_iter in xrange(col_i_start, col_i_start + 7, 3):
+            for col_j_iter in xrange(col_j_start, col_j_start + 7, 3):
+                if value not in board[col_i_iter][col_j_iter] and not (col_i_iter == section and col_j_iter == position):
+                    board[col_i_iter][col_j_iter]=board[col_i_iter][col_j_iter]+ value
+                    board[col_i_iter][col_j_iter] = board[col_i_iter][col_j_iter][0] + ''.join(sorted(board[col_i_iter][col_j_iter][1:]))
+                    print board[col_i_iter][col_j_iter]
+        print '\n'
+        for x in range(0,9):
+            if value not in board[section][x] and x != position:
+                board[section][x]=board[section][x]+value
+                board[section][x]=board[section][x][0] + ''.join(sorted(board[section][x][1:]))
+                print board[section][x]
+        board[section][position] = board[section][position].replace(value, '0')
+        board[section][position] = board[section][position]+value
+        board[section][position] = ''.join(sorted(board[section][position]))
+        
+        
+        return
+        
+
     
     # TO BE DONE, PRIORITY
     def remark_board(self, section, position, board):
@@ -331,7 +375,17 @@ class Sudoku:
                     self.remark_board(cell[0],cell[1],newBoard)
                     self.print_table(newBoard)
                     self.print_table_with_possibilities(newBoard)
-
+                    
+                    repeated_count = 0
+                    for i in self.boards_so_far:
+                        if i == newBoard:
+                            continue
+                            repeated_count = repeated_count+1
+                            
+                    copy = deepcopy(newBoard)  
+                    self.boards_so_far.append(copy)    
+                    print "repeated boards = " + str(repeated_count)     
+                    
                     if self.solveAlt(newBoard):
                         return True
 
