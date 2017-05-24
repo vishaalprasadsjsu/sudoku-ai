@@ -11,11 +11,17 @@ class Sudoku:
         self.boards_so_far = []
         self.sudoku_table = [0]*9
         self.read_table()
-        self.heuristic = 0
+        self.heuristic = 0 # number of zeros 
+
+
+
         for i in range(0,len(self.sudoku_table)):
             for j in range(0,len(self.sudoku_table)):
                 if self.sudoku_table[i][j] == "0":
-                    
+
+                    # heuristic starts off as number of zeros
+                    self.heuristic += 1
+
                     self.sudoku_table[i][j]+= self.get_possibilities(i,j,self.sudoku_table)
 
         #for x in range(0,len(self.sudoku_table)):
@@ -385,7 +391,7 @@ class Sudoku:
                     newBoard = self.place_poss_in_board(cell[2][charPos],cell[0], cell[1], board)
 
                     # added an item, update the heuristic
-                    self.heuristic += 1;
+                    # self.heuristic += 1;
                     
                     self.remark_board(cell[0],cell[1],newBoard)
                     self.print_table(newBoard)
@@ -415,6 +421,9 @@ class Sudoku:
         if self.board_filled(board):
             # may need deepcopy
             #self.board = deepcopy(board)
+
+            print "Board Solved! Heuristic: " + str(self.heuristic)
+
             self.board = board
             return True
             
@@ -437,17 +446,22 @@ class Sudoku:
             # cell[2] should contain possibilites, starting for loop at 1 to skip 0 value
             print "x is " +str(x)
             newBoard = self.place_poss_in_board(str(x),i, j, board)
+
+            # self.heuristic += 1
+
             #self.remark_board(i,j,newBoard)                    
             self.print_table(newBoard)
             #self.print_table_with_possibilities(newBoard)
 
             if self.violation_occured(i,j,newBoard):
                 print "FAIL"
+                self.heuristic -= 1
+
                 continue
             elif self.solveAlt2(newBoard, visited):
                 return True
 
-
+        self.heuristic -= 1
         return False 
        
        
@@ -466,8 +480,9 @@ if present_mode:
 # start a timer 
 start = time.time()
 
-# MINIMUM PATH VERSION
-s.solveAlt(s.sudoku_table)
+# select one: 
+s.solveAlt(s.sudoku_table)      # MINIMUM PATH 
+# s.solveAlt2(s.sudoku_table, False)   # BRUTE FORCE
 
 # calculate the elapsed time 
 end = time.time()
