@@ -534,18 +534,29 @@ Test
 """
 s = Sudoku() # instantiate Sudoku, read the file input_sudoku_puzzle
 
+print "Welcome to CS156 Sudoku Solver"
+print ""
+
+if present_mode: 
+    raw_input("Press <ENTER> to see the puzzle")
+
 # show the table before starting 
 s.print_table(s.sudoku_table)
 s.print_table_with_possibilities(s.sudoku_table)
 
-if present_mode: 
-    raw_input("Press <ENTER> to watch the agent begin")
 
-# start a timer 
-start = time.time()
+choice = raw_input("Enter '1 for AI' or '2 for Brute Force'")
+if choice == str(1):
+    start = time.time()    
+    s.solveAlt(s.sudoku_table)
+elif choice == str(2):
+    start = time.time()
+    s.solveAlt2(s.sudoku_table, False)
+else:
+   sys.stdout.write("Please respond with '1 for AI' or '2 for Brute Force'")
 
 # select one: 
-s.solveAlt(s.sudoku_table)      # MINIMUM PATH 
+      # MINIMUM PATH 
 # s.solveAlt2(s.sudoku_table, False)   # BRUTE FORCE
 
 # calculate the elapsed time 
