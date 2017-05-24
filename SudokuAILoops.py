@@ -545,7 +545,7 @@ s.print_table(s.sudoku_table)
 s.print_table_with_possibilities(s.sudoku_table)
 
 
-choice = raw_input("Enter '1 for AI' or '2 for Brute Force'")
+choice = raw_input("Enter '1' for AI or '2' for Brute Force")
 if choice == str(1):
     start = time.time()    
     s.solveAlt(s.sudoku_table)
@@ -553,7 +553,7 @@ elif choice == str(2):
     start = time.time()
     s.solveAlt2(s.sudoku_table, False)
 else:
-   sys.stdout.write("Please respond with '1 for AI' or '2 for Brute Force'")
+   sys.stdout.write("Please respond with '1' for AI or '2' for Brute Force")
 
 # select one: 
       # MINIMUM PATH 
