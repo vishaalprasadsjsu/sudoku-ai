@@ -1,4 +1,5 @@
 from copy import deepcopy
+import time 
 
 # Agent that solves Sudoku puzzles
 
@@ -10,6 +11,7 @@ class Sudoku:
         self.boards_so_far = []
         self.sudoku_table = [0]*9
         self.read_table()
+        self.heuristic = 0
         for i in range(0,len(self.sudoku_table)):
             for j in range(0,len(self.sudoku_table)):
                 if self.sudoku_table[i][j] == "0":
@@ -355,15 +357,21 @@ class Sudoku:
     # violation_occured may not be needed, new no possibilites method used
     def solveAlt(self,board):
         
-        
         if self.no_more_possibilites(board):
             print "FAIL"
+            # need to backtrack, update heuristic 
             self.print_table(board)
             self.print_table_with_possibilities(board)
+
+            self.heuristic -= 1;
+
             return False
         elif self.board_filled(board):
             # may need deepcopy
             #self.board = deepcopy(board)
+
+            print "Board Solved! Heuristic: " + str(self.heuristic)
+
             self.board = board
             return True
         previously_allowed_possibilities = []
@@ -375,6 +383,9 @@ class Sudoku:
                 for charPos in range(1,len(cell[2])):
                     # cell[2] should contain possibilites, starting for loop at 1 to skip 0 value
                     newBoard = self.place_poss_in_board(cell[2][charPos],cell[0], cell[1], board)
+
+                    # added an item, update the heuristic
+                    self.heuristic += 1;
                     
                     self.remark_board(cell[0],cell[1],newBoard)
                     self.print_table(newBoard)
@@ -443,16 +454,27 @@ class Sudoku:
 """
 Test
 """
-s = Sudoku()
+s = Sudoku() # instantiate Sudoku, read the file input_sudoku_puzzle
 
+# show the table before starting 
 s.print_table(s.sudoku_table)
 s.print_table_with_possibilities(s.sudoku_table)
 
 if present_mode: 
     raw_input("Press <ENTER> to watch the agent begin")
 
+# start a timer 
+start = time.time()
+
 # MINIMUM PATH VERSION
 s.solveAlt(s.sudoku_table)
+
+# calculate the elapsed time 
+end = time.time()
+
+# show the elapsed time
+print "Time: "  + str((end - start) * 1000) + " milliseconds"
+
 # BRUTE FORCE
 # s.solveAlt2(s.sudoku_table, False)
 
