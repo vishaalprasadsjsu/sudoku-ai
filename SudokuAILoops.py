@@ -173,7 +173,7 @@ class Sudoku:
     
     
     # Returns a list of triples which contain c[0] sector, c[1] position, and c[2] string of possibilities
-    def get_cells_with_allowed_num_poss(self, count, board):
+    def get_cells_with_allowed_num_poss(self, count, board, previous_possibilities):
         list = []
         for i in range(9):
             for j in range(9):
@@ -186,6 +186,9 @@ class Sudoku:
                         
                         
                     print list
+                    for value in previous_possibilities:
+                        if value == [i,j,board[i][j]]:
+                            continue
                     list.append([i,j,board[i][j]])
         return list
 
@@ -363,10 +366,11 @@ class Sudoku:
             #self.board = deepcopy(board)
             self.board = board
             return True
-        
+        previously_allowed_possibilities = []
         for i in range(2,10):
             print "index is at " + str(i)
-            allowed_possibilities = self.get_cells_with_allowed_num_poss(i, board)
+            allowed_possibilities = self.get_cells_with_allowed_num_poss(i, board, previously_allowed_possibilities)
+            previously_allowed_possibilities + allowed_possibilities
             for cell in allowed_possibilities:
                 for charPos in range(1,len(cell[2])):
                     # cell[2] should contain possibilites, starting for loop at 1 to skip 0 value
