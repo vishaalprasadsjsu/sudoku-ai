@@ -440,7 +440,7 @@ class Sudoku:
             # may need deepcopy
             #self.board = deepcopy(board)
 
-            print "Board Solved! Heuristic: " + str(self.heuristic)
+            print "Board Solved! Performance Measure: " + str(self.heuristic)
 
             self.board = board
             return True
@@ -486,7 +486,7 @@ class Sudoku:
             # may need deepcopy
             #self.board = deepcopy(board)
 
-            print "Board Solved! Heuristic: " + str(self.heuristic)
+            print "Board Solved! Performance Measure: " + str(self.heuristic)
 
             self.board = board
             return True
