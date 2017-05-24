@@ -337,6 +337,70 @@ class Sudoku:
                 board[section][x]=board[section][x].replace(value, "")
                 print board[section][x]
         return
+
+    def hidden_double(self, board):
+        cells_so_far = []
+        potential_double = []
+        for i in range(9):
+            for j in range(9):
+                # iterate through row
+                row_i_start = 3 * (i/3)
+                row_j_start = 3 * (j/3)
+                        
+                for row_i_iterator in range(row_i_start, row_i_start + 3):
+                    for row_j_iterator in range(row_j_start, row_j_start + 3):
+                        if [row_i_iterator,row_j_iterator,board[row_i_iterator][row_j_iterator]] in cells_so_far and len(board[row_i_iterator][row_j_iterator]) == 3:
+                          
+                            potential_double.append[row_i_iterator,row_j_iterator,[board[row_i_iterator][row_j_iterator]]]
+                        
+                        elif len(board[row_i_iterator][row_j_iterator]) == 3:
+                          
+                           cells_so_far.append[row_i_iterator,row_j_iterator,[board[row_i_iterator][row_j_iterator]]]
+                col_i_start = i%3;
+                col_j_start = j%3;
+                for col_i_iter in range(col_i_start, col_j_start + 3):
+                    for col_j_iter in range(col_i_start, col_j_start + 3):
+                        if [col_i_iter,col_j_iter,board[col_i_iter][col_j_iter]] in cells_so_far and len(board[col_i_iter][col_j_iter]) == 3 :
+                          
+                            potential_double.append[col_i_iter,col_j_iter,[board[col_i_iter][col_j_iter]]]
+                        
+                        elif len(board[col_i_iter][col_j_iter]) == 3:
+                          
+                           cells_so_far.append[col_i_iter,col_j_iter,[board[col_i_iter][col_j_iter]]]
+                            
+        cell_holder = []
+        for index in range(0, len(potential_double)):
+            for index2 in range(0, len(cell_holder)):
+                # SAME ROW
+                if potential_double[index][0] == cell_holder[index2][0] and potential_double[index][2] == cell_holder[index2][2]:
+                    cell_holder
+                
+        for value in potential_double:
+            for character in range(1,len(value[2])):
+                row_i_start = 3 * (value[0]/3)
+                row_j_start = 3 * (value[1]/3)
+                        
+                for row_i_iterator in range(row_i_start, row_i_start + 3):
+                    for row_j_iterator in range(row_j_start, row_j_start + 3):
+                        if [row_i_iterator,row_j_iterator,board[row_i_iterator][row_j_iterator]] in cells_so_far and len(board[row_i_iterator][row_j_iterator]) == 3 :
+                          
+                            potential_double.append[row_i_iterator,row_j_iterator,[board[row_i_iterator][row_j_iterator]]]
+                        
+                        elif len(board[row_i_iterator][row_j_iterator]) == 3:
+                          
+                           cells_so_far.append[row_i_iterator,row_j_iterator,[board[row_i_iterator][row_j_iterator]]]
+                col_i_start = i%3;
+                col_j_start = j%3;
+                for col_i_iter in range(col_i_start, col_j_start + 3):
+                    for col_j_iter in range(col_i_start, col_j_start + 3):
+                        if [col_i_iter,col_j_iter,board[col_i_iter][col_j_iter]] in cells_so_far and len(board[col_i_iter][col_j_iter]) == 3 :
+                          
+                            potential_double.append[col_i_iter,col_j_iter,[board[col_i_iter][col_j_iter]]]
+                        
+                        elif len(board[col_i_iter][col_j_iter]) == 3:
+                          
+                           cells_so_far.append[col_i_iter,col_j_iter,[board[col_i_iter][col_j_iter]]]
+         # WORK IN PROGRESS
         
     # old, incorrect algorithm
     def solve(self,board):
