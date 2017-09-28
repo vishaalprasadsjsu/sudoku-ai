@@ -17,7 +17,6 @@ For example, if this is the grid:
 0 9 0   0 5 0   4 0 1   
 0 6 0   0 3 0   5 0 0   
 0 2 0   0 0 0   9 0 0   
-
 ```
 
 Then the input file would look like:
