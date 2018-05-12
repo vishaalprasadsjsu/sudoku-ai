@@ -1,47 +1,30 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // larger big O runtime but less memory used
 
-public boolean solve( 3dArray board){
+public boolean solve (Array board) {
    
-    if(violation occurs){
+    if (violation occurs) {
         return false;    
     }
-    if(board is filled){
+    if (board is filled) {
         return true;
     }
     
     
-    for(int i = 1; i < 10; i++){
+    for (int i = 1; i < 10; i++) {
         allowedPossibilities = getCellsWithAllowedPossibilies(i, board)
         
-        foreach(cell : allowedPossibilities){ 
-            foreach (possibility : cell){  
-                place possibiliity as value at cell location of board; 
+        foreach (cell : allowedPossibilities) { 
+            foreach (possibility : cell) {  
+                place possibiliity as value at cell location of board
                 remarkTheBoard(cell.location, board);
-                if(solve(board)){
+                if (solve(board)) {
                     return true;                
                 }
-                else{
+                else {
                     unmark(board(cell.location));
                     remove possibility as value at cell location of board                
                 }    
             }
         }
-        
     }
-
 }
